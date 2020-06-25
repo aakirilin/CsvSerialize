@@ -11,12 +11,13 @@ namespace Test
     {
         static void Main(string[] args)
         {
-            var test = new TestClass[2];
-            var aaa = new TestGroup() { Name = "awd", Count = 2, Date = DateTime.Now };
-            test[0] = new TestClass() { Name = "awawd", Count = 1, Date = DateTime.Now, Group = aaa };
-            test[1] = test[0];
+            //var test = new TestClass[2];
+            //var aaa = new TestGroup() { Name = "awd", Count = 2, Date = DateTime.Now };
+            //test[0] = new TestClass() { Name = "awawd", Count = 1, Date = DateTime.Now, Group = aaa };
+            //test[1] = test[0];
             var serialise = new CsvSerialization<TestClass>();
-            serialise.Serialize("test.csv", test);
+            var objs = serialise.Deserializr("test.csv").ToList();
+            //serialise.Serialize("test.csv", test);
         }
     }
 

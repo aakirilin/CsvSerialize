@@ -42,11 +42,16 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CsvFieldAttribute.cs" />
-    <Compile Include="CsvFieldExtruder.cs" />
+    <Compile Include="CsvFieldHelper.cs" />
     <Compile Include="CsvGroupAttribute.cs" />
     <Compile Include="CsvSerialization.cs" />
+    <Compile Include="DateTimeParser.cs" />
     <Compile Include="Extention.cs" />
+    <Compile Include="IntParser.cs" />
+    <Compile Include="IValueParser.cs" />
+    <Compile Include="NDateTimeParser.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="StrParser.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

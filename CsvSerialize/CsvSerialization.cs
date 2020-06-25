@@ -10,7 +10,7 @@ namespace Csv.Serialize
     public class CsvSerialization<T> where T: class
     {
 
-        private IEnumerable<CsvFieldExtruder> GetWriters(
+        private IEnumerable<CsvFieldHelper> GetWriters(
             int offset, 
             Type typeObj, 
             params PropertyInfo[] ownerProps)
@@ -21,7 +21,7 @@ namespace Csv.Serialize
                 var csvFieldAttribute = prop.GetCustomAttribute<CsvFieldAttribute>();
                 if (csvFieldAttribute != null)
                 {
-                    yield return new CsvFieldExtruder(
+                    yield return new CsvFieldHelper(
                         csvFieldAttribute.index + offset,
                         csvFieldAttribute.datePattern,
                         ownerProps.Append(prop).ToArray() );
@@ -40,12 +40,12 @@ namespace Csv.Serialize
             }
         }
 
-        private string ConvertToString(T obj, int sizeLine, CsvFieldExtruder[] writers)
+        private string ConvertToString(T obj, int sizeLine, CsvFieldHelper[] writers)
         {
             var line = new string[sizeLine];
             foreach (var w in writers)
             {
-                line[w.index] = w.ExtrudedValue(obj);
+                line[w.index] = w.GetObjectValue(obj);
             }
             return String.Join(";", line);
         }
@@ -64,6 +64,23 @@ namespace Csv.Serialize
                         writer.WriteLine(ConvertToString(obj, sizeLine, writers));
                     }
                 }
+            }
+        }
+
+        public IEnumerable<T> Deserializr(string fileName, params IValueParser[] parsers)
+        {
+            var lines = File.ReadAllLines(fileName);
+            Type typeObj = typeof(T);
+            var writers = GetWriters(0, typeObj).ToArray();
+            foreach (var line in lines)
+            {
+                var parts = line.Split(';');
+                var obj = Activator.CreateInstance(typeObj);
+                foreach (var writer in writers)
+                {
+                    writer.SetObjectValue(parts, ref obj, parsers);
+                }
+                yield return (T)obj;
             }
         }
     }
